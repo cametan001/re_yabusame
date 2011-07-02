@@ -94,63 +94,8 @@ class Controller:
                      self.onChokyoshiBtn : self.view.chokyoshiBtn, \
                      self.onChokyoshiSenrekiBtn : self.view.chokyoshiSenrekiBtn }
         [self.view.Bind(wx.EVT_BUTTON, k, view_dic[k]) for k in view_dic.keys()]
-        
-        #set up the first dialog which allows the user to modify the Model's value
-        # self.shutsubahyo_file_sentaku_dlg = ShutsubahyoFileSentakuDlg(None)
-        # self.shutsubahyo_file_sentaku_dlg.SetListCtrl( \
-        #     self.model.shutsubahyoFileSentakuDesc( \
-        #         self.model.thisYear + "%"))
-        # [self.shutsubahyo_file_sentaku_dlg.yearSelect.Append(item) for item in self.model.yearList]
-        # self.shutsubahyo_file_sentaku_dlg.yearSelect.SetValue(self.model.thisYear)
-        # self.shutsubahyo_file_sentaku_dlg.SetListCtrl(self.model.showShutsubahyoFileSentaku())
-        self.shutsubahyo_file_sentaku_dlg.Bind( \
-            wx.EVT_COMBOBOX, \
-            self.onSelectYear, \
-            self.shutsubahyo_file_sentaku_dlg.yearSelect)
-        self.shutsubahyo_file_sentaku_dlg.Bind( \
-            wx.EVT_LIST_ITEM_DESELECTED, \
-            self.onListItemDeselected, \
-            self.shutsubahyo_file_sentaku_dlg.shutsubahyoFileSentakuView)
-        self.shutsubahyo_file_sentaku_dlg.Bind( \
-            wx.EVT_LIST_ITEM_SELECTED, \
-            self.onListItemSelected, \
-            self.shutsubahyo_file_sentaku_dlg.shutsubahyoFileSentakuView)
-        self.shutsubahyo_file_sentaku_dlg.Bind( \
-            wx.EVT_LIST_ITEM_ACTIVATED, \
-            self.onListItemActivated, \
-            self.shutsubahyo_file_sentaku_dlg.shutsubahyoFileSentakuView)
-        shutsubahyo_file_sentaku_btn_dic = \
-                                         { self.onHizukeKojunBtn: \
-                                           self.shutsubahyo_file_sentaku_dlg.hizukeKojunBtn, \
-                                           self.onHizukeShojunBtn: \
-                                           self.shutsubahyo_file_sentaku_dlg.hizukeShojunBtn, \
-                                           self.onBtnOK: \
-                                           self.shutsubahyo_file_sentaku_dlg.btnOK, \
-                                           self.onBtnCancel: \
-                                           self.shutsubahyo_file_sentaku_dlg.btnCancel, \
-                                           self.onBtnHelp: \
-                                           self.shutsubahyo_file_sentaku_dlg.btnHelp }
-        [self.shutsubahyo_file_sentaku_dlg.Bind( \
-            wx.EVT_BUTTON, \
-            k, \
-            shutsubahyo_file_sentaku_btn_dic[k]) \
-         for k in shutsubahyo_file_sentaku_btn_dic.keys()]
-        # pub.subscribe(self.ShowListCtrl, "LIST CTRL SHOWN")
-
-        #set up the second dialog which allows the user to modify the Model's value
-        self.shutsubahyo_race_sentaku_dlg = ShutsubahyoRaceSentakuDlg(None)
-        self.shutsubahyo_race_sentaku_btn_dic = \
-                                              { self.onShutsubahyoBtn : \
-                                                self.shutsubahyo_race_sentaku_dlg.taKaisaiBtn, \
-                                                self.onZenKaisaiBtn : \
-                                                self.shutsubahyo_race_sentaku_dlg.zenKaisaiBtn, \
-                                                self.onJiKaisaiBtn : \
-                                                self.shutsubahyo_race_sentaku_dlg.jiKaisaiBtn }
-        [self.shutsubahyo_race_sentaku_dlg.Bind( \
-            wx.EVT_BUTTON, \
-            k, \
-            self.shutsubahyo_race_sentaku_btn_dic[k])
-         for k in self.shutsubahyo_race_sentaku_btn_dic.keys()]
+                
+        self.dlgDict = {}
         
         pub.subscribe(self.ShowListCtrl, "LIST CTRL SHOWN")
         
@@ -158,25 +103,72 @@ class Controller:
 
     def makeShutsubahyoFileSentakuDlg(self):
         #set up the first dialog which allows the user to modify the Model's value
-        dlg = ShutsubahyoFileSentakuDlg(None)
-        dlg.SetListCtrl( \
+        self.dlgDict[u"出馬表ファイル選択"] = ShutsubahyoFileSentakuDlg(None)
+        self.dlgDict[u"出馬表ファイル選択"].SetListCtrl( \
             self.model.shutsubahyoFileSentakuDesc( \
                 self.model.thisYear + "%"))
-        [dlg.yearSelect.Append(item) for item in self.model.yearList]
-        dlg.yearSelect.SetValue(self.model.thisYear)
+        [self.dlgDict[u"出馬表ファイル選択"].yearSelect.Append(item) for item in self.model.yearList]
+        self.dlgDict[u"出馬表ファイル選択"].yearSelect.SetValue(self.model.thisYear)
+        # self.dlgDict[u"出馬表ファイル選択"].SetListCtrl(self.model.showShutsubahyoFileSentaku())
+        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            wx.EVT_COMBOBOX, \
+            self.onSelectYear, \
+            self.dlgDict[u"出馬表ファイル選択"].yearSelect)
+        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            wx.EVT_LIST_ITEM_DESELECTED, \
+            self.onListItemDeselected, \
+            self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView)
+        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            wx.EVT_LIST_ITEM_SELECTED, \
+            self.onListItemSelected, \
+            self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView)
+        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            wx.EVT_LIST_ITEM_ACTIVATED, \
+            self.onListItemActivated, \
+            self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView)
+        shutsubahyo_file_sentaku_btn_dic = \
+                                         { self.onHizukeKojunBtn: \
+                                           self.dlgDict[u"出馬表ファイル選択"].hizukeKojunBtn, \
+                                           self.onHizukeShojunBtn: \
+                                           self.dlgDict[u"出馬表ファイル選択"].hizukeShojunBtn, \
+                                           self.onBtnOK: \
+                                           self.dlgDict[u"出馬表ファイル選択"].btnOK, \
+                                           self.onBtnCancel: \
+                                           self.dlgDict[u"出馬表ファイル選択"].btnCancel, \
+                                           self.onBtnHelp: \
+                                           self.dlgDict[u"出馬表ファイル選択"].btnHelp }
+        [self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            wx.EVT_BUTTON, \
+            k, \
+            shutsubahyo_file_sentaku_btn_dic[k]) \
+         for k in shutsubahyo_file_sentaku_btn_dic.keys()]
+
+    def makeShutsubahyoRaceSentakuDlg(self):
+        self.dlgDict[u"出馬表レース選択"] = ShutsubahyoRaceSentakuDlg(None)
+        self.shutsubahyo_race_sentaku_btn_dic = \
+                                              { self.onShutsubahyoBtn : \
+                                                self.dlgDict[u"出馬表レース選択"].taKaisaiBtn, \
+                                                self.onZenKaisaiBtn : \
+                                                self.dlgDict[u"出馬表レース選択"].zenKaisaiBtn, \
+                                                self.onJiKaisaiBtn : \
+                                                self.dlgDict[u"出馬表レース選択"].jiKaisaiBtn }
+        [self.dlgDict[u"出馬表レース選択"].Bind( \
+            wx.EVT_BUTTON, \
+            k, \
+            self.shutsubahyo_race_sentaku_btn_dic[k])
+         for k in self.shutsubahyo_race_sentaku_btn_dic.keys()]
         
     def onQuit(self, event): # wxGlade: yabusameFrame.<event_handler>
         # print "Event handler `onQuit' not implemented!"
         # event.Skip()
-        self.shutsubahyo_race_sentaku_dlg.Destroy()
-        self.shutsubahyo_file_sentaku_dlg.Destroy()
         self.view.Close()
 
     def onShutsubahyoBtn(self, event): # wxGlade: yabusameFrame.<event_handler>
         # print "Event handler `onShutsubahyoBtn' not implemented!"
         # event.Skip()
-        self.shutsubahyo_file_sentaku_dlg.ShowModal()
-        # self.shutsubahyo_file_sentaku_dlg.Destroy()
+        self.makeShutsubahyoFileSentakuDlg()
+        self.dlgDict[u"出馬表ファイル選択"].ShowModal()
+        self.dlgDict[u"出馬表ファイル選択"].Destroy()
 
     def onSaishinShutsubahyoBtn(self, event): # wxGlade: yabusameFrame.<event_handler>
         print "Event handler `onSaishinShutsubahyoBtn' not implemented!"
@@ -227,12 +219,12 @@ class Controller:
     def ShowListCtrl(self, message):
         # print "Event handler `OederChanged' not implemented!"
         # event.Skip()
-        if self.shutsubahyo_file_sentaku_dlg:
-            self.shutsubahyo_file_sentaku_dlg.RemoveListCtrl()
-            self.shutsubahyo_file_sentaku_dlg.SetListCtrl(message.data)
-        elif self.shutsubahyo_race_sentaku_dlg:
-            self.shutsubahyo_race_sentaku_dlg.RemoveListCtrl()
-            self.shutsubahyo_race_sentaku_dlg.SetListCtrl(message.data)
+        if self.dlgDict[u"出馬表ファイル選択"]:
+            self.dlgDict[u"出馬表ファイル選択"].RemoveListCtrl()
+            self.dlgDict[u"出馬表ファイル選択"].SetListCtrl(message.data)
+        elif self.dlgDict[u"出馬表レース選択"]:
+            self.dlgDict[u"出馬表レース選択"].RemoveListCtrl()
+            self.dlgDict[u"出馬表レース選択"].SetListCtrl(message.data)
         else:
             print "Event handler `OederChanged' not implemented!"
             event.Skip()
@@ -249,13 +241,14 @@ class Controller:
         # print "Event handler `onListItemActivated' not implemented!"
         # event.Skip()
         self.currentItem = event.m_itemIndex
-        if self.shutsubahyo_file_sentaku_dlg:
+        if self.dlgDict[u"出馬表ファイル選択"]:
+            self.makeShutsubahyoRaceSentakuDlg()
             self.model.shutsubahyoRaceSentaku( \
-                self.shutsubahyo_file_sentaku_dlg.shutsubahyoFileSentakuView.GetItemText( \
+                self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView.GetItemText( \
                     self.currentItem)[:8] + '%')
-            self.shutsubahyo_file_sentaku_dlg.Destroy()
-        self.shutsubahyo_race_sentaku_dlg.ShowModal()
-        # self.shutsubahyo_race_sentaku_dlg.Destroy()
+            self.dlgDict[u"出馬表ファイル選択"].Destroy()
+            self.dlgDict[u"出馬表レース選択"].ShowModal()
+            self.dlgDict[u"出馬表レース選択"].Destroy()
 
     def onBtnOK(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         print "Event handler `onBtnOK' not implemented!"
@@ -264,7 +257,7 @@ class Controller:
     def onBtnCancel(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         # print "Event handler `onBtnCancel' not implemented!"
         # event.Skip()
-        self.shutsubahyo_file_sentaku_dlg.Close()
+        self.dlgDict[u"出馬表ファイル選択"].Destroy()
 
     def onBtnHelp(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         print "Event handler `onBtnHelp' not implemented!"
