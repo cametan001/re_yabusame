@@ -306,7 +306,7 @@ class shutsubahyoRaceSentakuDialog(wx.Dialog):
         sizer_7.Add(self.panel_8, 1, wx.EXPAND, 0)
         sizer_10.Add(self.shutsubahyoRaceSentakuView, 1, wx.EXPAND, 0)
         self.panel_9.SetSizer(sizer_10)
-        sizer_7.Add(self.panel_9, 1, wx.EXPAND, 0)
+        sizer_7.Add(self.panel_9, 7, wx.EXPAND, 0)
         self.SetSizer(sizer_7)
         sizer_7.Fit(self)
         self.Layout()

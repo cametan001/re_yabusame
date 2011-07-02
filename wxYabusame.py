@@ -28,9 +28,9 @@ class Model:
     def showShutsubahyoFileSentaku(self):
         yearCode = self.thisYear + "%"
         if self.flag == "d":
-            pub.sendMessage("LIST CTRL SHOWN", self.shutsubahyoFileSentakuDesc(yearCode))
+            pub.sendMessage("FILE CHOSEN", self.shutsubahyoFileSentakuDesc(yearCode))
         elif self.flag == "a":
-            pub.sendMessage("LIST CTRL SHOWN", self.shutsubahyoFileSentakuAsc(yearCode))
+            pub.sendMessage("FILE CHOSEN", self.shutsubahyoFileSentakuAsc(yearCode))
         else:
             pass
 
@@ -44,7 +44,9 @@ class Model:
 
     def shutsubahyoRaceSentaku(self, value):
         _data = srss.shutsubahyoRaceSentakuSQL()
-        pub.sendMessage("LIST CTRL SHOWN", _data.getAllRows(code = value))
+        pub.sendMessage("RACE CHOSEN", { \
+            u"日時" : self.kaisaiNengappiDict[value],
+            u"レースリスト" : _data.getAllRows(code = value + "%")})
 
 # View
 class View(mvc.yabusameFrame):
@@ -97,66 +99,66 @@ class Controller:
                 
         self.dlgDict = {}
         
-        pub.subscribe(self.ShowListCtrl, "LIST CTRL SHOWN")
+        pub.subscribe(self.ChooseFile, "FILE CHOSEN")
+        pub.subscribe(self.ChooseRace, "RACE CHOSEN")
         
         self.view.Show()
 
     def makeShutsubahyoFileSentakuDlg(self):
         #set up the first dialog which allows the user to modify the Model's value
-        self.dlgDict[u"出馬表ファイル選択"] = ShutsubahyoFileSentakuDlg(None)
-        self.dlgDict[u"出馬表ファイル選択"].SetListCtrl( \
+        self.dlgDict[u"ファイル選択"] = ShutsubahyoFileSentakuDlg(None)
+        self.dlgDict[u"ファイル選択"].SetListCtrl( \
             self.model.shutsubahyoFileSentakuDesc( \
                 self.model.thisYear + "%"))
-        [self.dlgDict[u"出馬表ファイル選択"].yearSelect.Append(item) for item in self.model.yearList]
-        self.dlgDict[u"出馬表ファイル選択"].yearSelect.SetValue(self.model.thisYear)
-        # self.dlgDict[u"出馬表ファイル選択"].SetListCtrl(self.model.showShutsubahyoFileSentaku())
-        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+        [self.dlgDict[u"ファイル選択"].yearSelect.Append(item) for item in self.model.yearList]
+        self.dlgDict[u"ファイル選択"].yearSelect.SetValue(self.model.thisYear)
+        self.dlgDict[u"ファイル選択"].Bind( \
             wx.EVT_COMBOBOX, \
             self.onSelectYear, \
-            self.dlgDict[u"出馬表ファイル選択"].yearSelect)
-        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            self.dlgDict[u"ファイル選択"].yearSelect)
+        self.dlgDict[u"ファイル選択"].Bind( \
             wx.EVT_LIST_ITEM_DESELECTED, \
             self.onListItemDeselected, \
-            self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView)
-        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            self.dlgDict[u"ファイル選択"].shutsubahyoFileSentakuView)
+        self.dlgDict[u"ファイル選択"].Bind( \
             wx.EVT_LIST_ITEM_SELECTED, \
             self.onListItemSelected, \
-            self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView)
-        self.dlgDict[u"出馬表ファイル選択"].Bind( \
+            self.dlgDict[u"ファイル選択"].shutsubahyoFileSentakuView)
+        self.dlgDict[u"ファイル選択"].Bind( \
             wx.EVT_LIST_ITEM_ACTIVATED, \
             self.onListItemActivated, \
-            self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView)
+            self.dlgDict[u"ファイル選択"].shutsubahyoFileSentakuView)
         shutsubahyo_file_sentaku_btn_dic = \
                                          { self.onHizukeKojunBtn: \
-                                           self.dlgDict[u"出馬表ファイル選択"].hizukeKojunBtn, \
+                                           self.dlgDict[u"ファイル選択"].hizukeKojunBtn, \
                                            self.onHizukeShojunBtn: \
-                                           self.dlgDict[u"出馬表ファイル選択"].hizukeShojunBtn, \
+                                           self.dlgDict[u"ファイル選択"].hizukeShojunBtn, \
                                            self.onBtnOK: \
-                                           self.dlgDict[u"出馬表ファイル選択"].btnOK, \
+                                           self.dlgDict[u"ファイル選択"].btnOK, \
                                            self.onBtnCancel: \
-                                           self.dlgDict[u"出馬表ファイル選択"].btnCancel, \
+                                           self.dlgDict[u"ファイル選択"].btnCancel, \
                                            self.onBtnHelp: \
-                                           self.dlgDict[u"出馬表ファイル選択"].btnHelp }
-        [self.dlgDict[u"出馬表ファイル選択"].Bind( \
+                                           self.dlgDict[u"ファイル選択"].btnHelp }
+        [self.dlgDict[u"ファイル選択"].Bind( \
             wx.EVT_BUTTON, \
             k, \
             shutsubahyo_file_sentaku_btn_dic[k]) \
          for k in shutsubahyo_file_sentaku_btn_dic.keys()]
 
     def makeShutsubahyoRaceSentakuDlg(self):
-        self.dlgDict[u"出馬表レース選択"] = ShutsubahyoRaceSentakuDlg(None)
-        self.shutsubahyo_race_sentaku_btn_dic = \
-                                              { self.onShutsubahyoBtn : \
-                                                self.dlgDict[u"出馬表レース選択"].taKaisaiBtn, \
-                                                self.onZenKaisaiBtn : \
-                                                self.dlgDict[u"出馬表レース選択"].zenKaisaiBtn, \
-                                                self.onJiKaisaiBtn : \
-                                                self.dlgDict[u"出馬表レース選択"].jiKaisaiBtn }
-        [self.dlgDict[u"出馬表レース選択"].Bind( \
+        self.dlgDict[u"レース選択"] = ShutsubahyoRaceSentakuDlg(None)
+        shutsubahyo_race_sentaku_btn_dic = \
+                                         { self.onShutsubahyoBtn : \
+                                           self.dlgDict[u"レース選択"].taKaisaiBtn, \
+                                           self.onZenKaisaiBtn : \
+                                           self.dlgDict[u"レース選択"].zenKaisaiBtn, \
+                                           self.onJiKaisaiBtn : \
+                                           self.dlgDict[u"レース選択"].jiKaisaiBtn }
+        [self.dlgDict[u"レース選択"].Bind( \
             wx.EVT_BUTTON, \
             k, \
-            self.shutsubahyo_race_sentaku_btn_dic[k])
-         for k in self.shutsubahyo_race_sentaku_btn_dic.keys()]
+            shutsubahyo_race_sentaku_btn_dic[k])
+         for k in shutsubahyo_race_sentaku_btn_dic.keys()]
         
     def onQuit(self, event): # wxGlade: yabusameFrame.<event_handler>
         # print "Event handler `onQuit' not implemented!"
@@ -167,8 +169,8 @@ class Controller:
         # print "Event handler `onShutsubahyoBtn' not implemented!"
         # event.Skip()
         self.makeShutsubahyoFileSentakuDlg()
-        self.dlgDict[u"出馬表ファイル選択"].ShowModal()
-        self.dlgDict[u"出馬表ファイル選択"].Destroy()
+        self.dlgDict[u"ファイル選択"].ShowModal()
+        self.dlgDict[u"ファイル選択"].Destroy()
 
     def onSaishinShutsubahyoBtn(self, event): # wxGlade: yabusameFrame.<event_handler>
         print "Event handler `onSaishinShutsubahyoBtn' not implemented!"
@@ -216,18 +218,18 @@ class Controller:
         self.model.flag = "a"
         self.model.showShutsubahyoFileSentaku()
 
-    def ShowListCtrl(self, message):
+    def ChooseFile(self, message):
         # print "Event handler `OederChanged' not implemented!"
         # event.Skip()
-        if self.dlgDict[u"出馬表ファイル選択"]:
-            self.dlgDict[u"出馬表ファイル選択"].RemoveListCtrl()
-            self.dlgDict[u"出馬表ファイル選択"].SetListCtrl(message.data)
-        elif self.dlgDict[u"出馬表レース選択"]:
-            self.dlgDict[u"出馬表レース選択"].RemoveListCtrl()
-            self.dlgDict[u"出馬表レース選択"].SetListCtrl(message.data)
-        else:
-            print "Event handler `OederChanged' not implemented!"
-            event.Skip()
+        self.dlgDict[u"ファイル選択"].RemoveListCtrl()
+        self.dlgDict[u"ファイル選択"].SetListCtrl(message.data)
+
+    def ChooseRace(self, message):
+        # print "Event handler `OederChanged' not implemented!"
+        # event.Skip()
+        self.dlgDict[u"レース選択"].kaisaiNichijiLabel.SetLabel(message.data[u"日時"])
+        self.dlgDict[u"レース選択"].RemoveListCtrl()
+        self.dlgDict[u"レース選択"].SetListCtrl(message.data[u"レースリスト"])
     
     def onListItemDeselected(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         print "Event handler `onListItemDeselected' not implemented!"
@@ -240,15 +242,15 @@ class Controller:
     def onListItemActivated(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         # print "Event handler `onListItemActivated' not implemented!"
         # event.Skip()
-        self.currentItem = event.m_itemIndex
-        if self.dlgDict[u"出馬表ファイル選択"]:
+        currentItem = event.m_itemIndex
+        if self.dlgDict[u"ファイル選択"]:
             self.makeShutsubahyoRaceSentakuDlg()
-            self.model.shutsubahyoRaceSentaku( \
-                self.dlgDict[u"出馬表ファイル選択"].shutsubahyoFileSentakuView.GetItemText( \
-                    self.currentItem)[:8] + '%')
-            self.dlgDict[u"出馬表ファイル選択"].Destroy()
-            self.dlgDict[u"出馬表レース選択"].ShowModal()
-            self.dlgDict[u"出馬表レース選択"].Destroy()
+            code= \
+                  self.dlgDict[u"ファイル選択"].shutsubahyoFileSentakuView.GetItemText(currentItem)[:8]
+            self.model.shutsubahyoRaceSentaku(code)
+            self.dlgDict[u"ファイル選択"].Destroy()
+            self.dlgDict[u"レース選択"].ShowModal()
+            self.dlgDict[u"レース選択"].Destroy()
 
     def onBtnOK(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         print "Event handler `onBtnOK' not implemented!"
@@ -257,7 +259,7 @@ class Controller:
     def onBtnCancel(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         # print "Event handler `onBtnCancel' not implemented!"
         # event.Skip()
-        self.dlgDict[u"出馬表ファイル選択"].Destroy()
+        self.dlgDict[u"ファイル選択"].Destroy()
 
     def onBtnHelp(self, event): # wxGlade: shutsubahyoFileSentakuDialog.<event_handler>
         print "Event handler `onBtnHelp' not implemented!"
