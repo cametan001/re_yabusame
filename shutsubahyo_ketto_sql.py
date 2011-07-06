@@ -1,0 +1,67 @@
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
+
+import db
+
+class shutsubahyoKettoSQL(db.DB):
+    def __init__(self):
+        db.DB.__init__(self)
+
+    def SQLtemp(self):
+        _str = """ \
+SELECT
+    CASE SE.BLINKER_SHIYO_KUBUN
+    WHEN '1' THEN 'B'
+    ELSE ''
+    END ||
+    SE.WAKUBAN AS WAKUBAN
+    , SE.UMABAN AS UMABAN
+    , CASE 
+    WHEN SE.UMAKIGO_CODE = '06' OR SE.UMAKIGO_CODE = '11' OR
+    SE.UMAKIGO_CODE = '16' OR SE.UMAKIGO_CODE = '20' OR
+    SE.UMAKIGO_CODE = '26' OR SE.UMAKIGO_CODE = '27' OR
+    SE.UMAKIGO_CODE = '40' OR SE.UMAKIGO_CODE = '41' THEN '$'
+    WHEN SE.UMAKIGO_CODE = '31' THEN '*'
+    ELSE ''
+    END ||
+    SE.BAMEI AS BAMEI
+    , SC.CONTENT || SE.BAREI AS SEIREI
+    , CASE KS.TOZAI_SHOZOKU_CODE
+    WHEN '1' THEN '(美)'
+    WHEN '2' THEN '(栗)'
+    ELSE ''
+    END || 
+    SE.KISHUMEI_RYAKUSHO AS KISHUMEI
+    , SE.FUTAN_JURYO AS KINRYO
+    , CASE
+    WHEN SE.DATA_KUBUN BETWEEN '3' AND '7' THEN SE.TANSHO_ODDS
+    ELSE ''
+    END AS TANSHO
+    , SE.BATAIJU || ' ' || SE.ZOGEN_FUGO || ' ' || SE.ZOGEN_SA AS BATAIJU
+    , UM.KETTO1_BAMEI AS FATHER
+    , UM.KETTO2_BAMEI AS MOTHER
+    , UM.KETTO5_BAMEI AS GRAND_FATHER
+    , UM.KETTO6_BAMEI AS GRAND_MOTHER
+FROM
+    JVD_UMAGOTO_RACE_JOHO SE
+    LEFT OUTER JOIN JVD_SEIBETSU_CODE SC
+    ON SC.CODE = SE.SEIBETSU_CODE
+    LEFT OUTER JOIN JVD_KISHU_MASTER KS
+    ON KS.KISHU_CODE = SE.KISHU_CODE
+    LEFT OUTER JOIN JVD_UMAKIGO_CODE UC
+    ON UC.CODE = SE.UMAKIGO_CODE
+    LEFT OUTER JOIN JVD_KYOSOBA_MASTER UM
+    ON UM.KETTO_TOROKU_BANGO = SE.KETTO_TOROKU_BANGO
+WHERE 1 = 1
+    AND SE.RACE_CODE = :code
+ORDER BY
+    SE.RACE_CODE ASC
+    , SE.UMABAN ASC
+;
+        """
+        return _str
+
+if __name__ == '__main__':
+    v = shutsubahyoKettoSQL()
+    for i in v.getAllRows(code = '2011062609040411'):
+        print i
