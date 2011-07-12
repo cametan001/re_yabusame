@@ -1,0 +1,22 @@
+特に書くこと無し。
+
+が一応。
+
+TARGET frontier JV
+http://homepage2.nifty.com/~blitz/
+
+の検索機能をLinux上でPython + wxPython + SQLiteで再現出来るのか、と言う試み。
+
+MVCモデルで構築しようとしてるが、難問多し。そもそもJV-Link
+
+http://jra-van.jp/dlb/sft/jv.html
+
+をLinuxから(Wine経由で)まだ使えない。
+故に仮想マシン上のWindowsからPC-KEIBA DB
+
+http://www.pc-keiba.com/
+
+を使って外部ハードディスクへデータを落とす状態である。
+
+SQLでのCLI検索モデルをGUIへと置き換える辺りが難問。
+現時点では、Python純正のsqlite3モジュールではなく、SQLAlchemyへ移行しようかどうか悩んでる状態。
