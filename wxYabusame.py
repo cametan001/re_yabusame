@@ -21,7 +21,8 @@ class Model:
             "order" : "d", \
             "day" : False, \
             "ListItem" : False, \
-            "raceCodePos" : False }
+            "raceCodePos" : False,  \
+            "shussobaPos" : False }
         self.yearList = [str(i) for i in range(dt.today().year, 1985, -1)]
         self.kaisaiNengappiDict = dict(mknls.makeKaisaiNengappiList().getAllRows())
         self.kaisaiNengappiKeyList = self.kaisaiNengappiDict.keys()
@@ -73,7 +74,10 @@ class Model:
 
     def shutsubahyoBase(self, value):
         _data = sbs.shutsubahyoBaseSQL()
-        return _data.getAllRows(code = value)
+        aList = _data.getAllRows(code = value)
+        self.shussobaList = [i[0] for i in aList]
+        print self.shussobaList
+        return aList
 
     def shutsubahyoKetto(self, value):
         _data = sks.shutsubahyoKettoSQL()
@@ -123,14 +127,14 @@ class ShutsubahyoDlg(mvc.shutsubahyoDialog):
         [i[0].SetLabel(i[1].encode('utf_8')) for i in zip(labelList, data[0])]
 
     def SetKihonView(self, data):
-        cs = [u'枠', u'番', u'馬名', u'性齢', u'騎手', u'斤量', u'単勝', \
+        cs = [u'コード', u'枠', u'番', u'馬名', u'性齢', u'騎手', u'斤量', u'単勝', \
               u'馬体重', u'調教師', u'馬記号', u'馬主', u'生産者', u'毛色', u'誕生']
         [self.kihonView.InsertColumn(cs.index(heading), heading) for heading in cs]
         [self.kihonView.Append(i) for i in data]
         [self.kihonView.SetColumnWidth(i, wx.LIST_AUTOSIZE) for i in range (len(cs))]
 
     def SetKettoView(self, data):
-        cs = [u'枠', u'番', u'馬名', u'性齢', u'騎手', u'斤量', \
+        cs = [u'コード', u'枠', u'番', u'馬名', u'性齢', u'騎手', u'斤量', \
               u'単勝', u'馬体重', u'父', u'母', u'母父', u'母の母']
         [self.kettoView.InsertColumn(cs.index(heading), heading) for heading in cs]
         [self.kettoView.Append(i) for i in data]
@@ -263,7 +267,7 @@ class Controller:
                               self.onKettohyoBtn : \
                               self.dlgDict[u"出馬表"].kettohyoBtn, \
                               self.onOddsBtn : \
-                              self.dlgDict[u"出馬表"].oddsBtn, \
+                              self.dlgDict[u"出馬表"].oddBtn, \
                               self.onZenRaceBtn : \
                               self.dlgDict[u"出馬表"].zenRaceBtn, \
                               self.onJiRaceBtn : \

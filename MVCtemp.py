@@ -361,13 +361,13 @@ class shutsubahyoDialog(wx.Dialog):
         self.panel_13 = wx.Panel(self.panel_11, -1)
         self.panel_10 = wx.Panel(self, -1)
         self.taRaceBtn = wx.Button(self.panel_10, -1, u"他レース")
-        self.anotherBtn = wx.Button(self.panel_10, -1, "%s%d")
-        self.theOtherBtn = wx.Button(self.panel_10, -1, "%s%d")
+        self.anotherBtn = wx.Button(self.panel_10, -1, "")
+        self.theOtherBtn = wx.Button(self.panel_10, -1, "")
         self.taisenBtn = wx.Button(self.panel_10, -1, u"対戦")
         self.kaisaiBunsekiBtn = wx.Button(self.panel_10, -1, u"開催分析")
         self.hanroChokyoBtn = wx.Button(self.panel_10, -1, u"坂路調教")
         self.kettohyoBtn = wx.Button(self.panel_10, -1, u"血統表")
-        self.oddsBtn = wx.Button(self.panel_10, -1, u"オッズ")
+        self.oddBtn = wx.Button(self.panel_10, -1, u"オッズ")
         self.zenRaceBtn = wx.Button(self.panel_13, wx.ID_UP, "")
         self.jiRaceBtn = wx.Button(self.panel_13, wx.ID_DOWN, "")
         self.kaisaiNengappiLabel = wx.StaticText(self.panel_15, -1, "")
@@ -393,13 +393,13 @@ class shutsubahyoDialog(wx.Dialog):
         self.__do_layout()
 
         self.Bind(wx.EVT_BUTTON, self.onTaRaceBtn, self.taRaceBtn)
-        self.Bind(wx.EVT_BUTTON, self.onAnotherButton, self.anotherBtn)
+        self.Bind(wx.EVT_BUTTON, self.onAnotherBtn, self.anotherBtn)
         self.Bind(wx.EVT_BUTTON, self.onTheOtherBtn, self.theOtherBtn)
         self.Bind(wx.EVT_BUTTON, self.onTaisenBtn, self.taisenBtn)
         self.Bind(wx.EVT_BUTTON, self.onKaisaiBunsekiBtn, self.kaisaiBunsekiBtn)
-        self.Bind(wx.EVT_BUTTON, self.onHanroChokoBtn, self.hanroChokyoBtn)
+        self.Bind(wx.EVT_BUTTON, self.onHanroChokyoBtn, self.hanroChokyoBtn)
         self.Bind(wx.EVT_BUTTON, self.onKettohyoBtn, self.kettohyoBtn)
-        self.Bind(wx.EVT_BUTTON, self.onOddsBtn, self.oddsBtn)
+        self.Bind(wx.EVT_BUTTON, self.onOddBtn, self.oddBtn)
         self.Bind(wx.EVT_BUTTON, self.onZenRaceBtn, self.zenRaceBtn)
         self.Bind(wx.EVT_BUTTON, self.onJiRaceBtn, self.jiRaceBtn)
         self.Bind(wx.EVT_BUTTON, self.onBtn1, self.button_1)
@@ -427,16 +427,16 @@ class shutsubahyoDialog(wx.Dialog):
         sizer_16 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_15 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_13 = wx.BoxSizer(wx.VERTICAL)
-        grid_sizer_3 = wx.GridSizer(2, 4, 0, 0)
-        grid_sizer_3.Add(self.taRaceBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.anotherBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.theOtherBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.taisenBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.kaisaiBunsekiBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.hanroChokyoBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.kettohyoBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        grid_sizer_3.Add(self.oddsBtn, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        self.panel_10.SetSizer(grid_sizer_3)
+        sizer_24 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_24.Add(self.taRaceBtn, 0, 0, 0)
+        sizer_24.Add(self.anotherBtn, 0, 0, 0)
+        sizer_24.Add(self.theOtherBtn, 0, 0, 0)
+        sizer_24.Add(self.taisenBtn, 0, 0, 0)
+        sizer_24.Add(self.kaisaiBunsekiBtn, 0, 0, 0)
+        sizer_24.Add(self.hanroChokyoBtn, 0, 0, 0)
+        sizer_24.Add(self.kettohyoBtn, 0, 0, 0)
+        sizer_24.Add(self.oddBtn, 0, 0, 0)
+        self.panel_10.SetSizer(sizer_24)
         sizer_11.Add(self.panel_10, 1, wx.EXPAND, 0)
         sizer_13.Add(self.zenRaceBtn, 0, 0, 0)
         sizer_13.Add(self.jiRaceBtn, 0, 0, 0)
@@ -470,7 +470,7 @@ class shutsubahyoDialog(wx.Dialog):
         self.panel_18.SetSizer(sizer_18)
         sizer_12.Add(self.panel_18, 5, wx.EXPAND, 0)
         self.panel_11.SetSizer(sizer_12)
-        sizer_11.Add(self.panel_11, 1, wx.EXPAND, 0)
+        sizer_11.Add(self.panel_11, 2, wx.EXPAND, 0)
         sizer_20.Add(self.kihonView, 1, wx.EXPAND, 0)
         self.kihonPanel.SetSizer(sizer_20)
         sizer_21.Add(self.kettoView, 1, wx.EXPAND, 0)
@@ -482,7 +482,7 @@ class shutsubahyoDialog(wx.Dialog):
         self.notebook_1.AddPage(self.chakudosuPanel, u"着度数")
         sizer_19.Add(self.notebook_1, 1, wx.EXPAND, 0)
         self.panel_12.SetSizer(sizer_19)
-        sizer_11.Add(self.panel_12, 4, wx.EXPAND, 0)
+        sizer_11.Add(self.panel_12, 12, wx.EXPAND, 0)
         self.SetSizer(sizer_11)
         sizer_11.Fit(self)
         self.Layout()
@@ -538,6 +538,18 @@ class shutsubahyoDialog(wx.Dialog):
 
     def onBtn3(self, event): # wxGlade: shutsubahyoDialog.<event_handler>
         print "Event handler `onBtn3' not implemented!"
+        event.Skip()
+
+    def onAnotherBtn(self, event): # wxGlade: shutsubahyoDialog.<event_handler>
+        print "Event handler `onAnotherBtn' not implemented"
+        event.Skip()
+
+    def onHanroChokyoBtn(self, event): # wxGlade: shutsubahyoDialog.<event_handler>
+        print "Event handler `onHanroChokyoBtn' not implemented"
+        event.Skip()
+
+    def onOddBtn(self, event): # wxGlade: shutsubahyoDialog.<event_handler>
+        print "Event handler `onOddBtn' not implemented"
         event.Skip()
 
 # end of class shutsubahyoDialog

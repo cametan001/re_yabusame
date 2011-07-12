@@ -10,7 +10,8 @@ class shutsubahyoKettoSQL(db.DB):
     def SQLtemp(self):
         _str = """ \
 SELECT
-    CASE SE.BLINKER_SHIYO_KUBUN
+    SE.KETTO_TOROKU_BANGO AS CODE
+    , CASE SE.BLINKER_SHIYO_KUBUN
     WHEN '1' THEN 'B'
     ELSE ''
     END ||
